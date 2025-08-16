@@ -1,4 +1,3 @@
-// src/components/UsestateFetch.tsx
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { toggleUsersVisibility } from '../redux/slices/visibilitySlice'

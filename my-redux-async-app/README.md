@@ -1,181 +1,141 @@
-# React Redux App
+# Redux Async App
 
-Цей проект демонструє використання Redux Toolkit для управління глобальним станом у React додатку. Додаток містить різні типи форм та асинхронні операції з даними.
+Простий React додаток для вивчення роботи з Redux Toolkit та асинхронними операціями.
 
-## Технології
+## Опис проекту
 
-- **React 18** з TypeScript
-- **Redux Toolkit** для управління станом
-- **React Redux** для інтеграції з React
-- **Vite** як bundler
-- **Tailwind CSS** для стилізації
-
-## Особливості
-
-- ✅ Централізоване управління станом через Redux
-- ✅ Типізовані Redux хуки для TypeScript
-- ✅ Асинхронні операції з createAsyncThunk
-- ✅ Контрольовані та неконтрольовані форми
-- ✅ Управління видимістю компонентів
-- ✅ Завантаження даних з API
+Цей проект демонструє основні концепції роботи з Redux Toolkit у React додатку, включаючи:
+- Управління станом форм (controlled та uncontrolled)
+- Асинхронні операції з API
+- Керування видимістю компонентів
 
 ## Структура проекту
 
 ```
 src/
-├── redux/
-│   ├── store.ts              # Конфігурація Redux store
-│   ├── hooks.ts              # Типізовані Redux хуки
-│   └── slices/
-│       ├── visibilitySlice.ts # Управління видимістю компонентів
-│       ├── usersSlice.ts     # Управління даними користувачів
-│       └── formSlice.ts      # Управління станом форм
 ├── components/
-│   ├── ControlledForm.tsx    # Контрольована форма з Redux
-│   ├── UncontrolledForm.tsx  # Неконтрольована форма
-│   └── UsestateFetch.tsx     # Компонент з асинхронним завантаженням
-├── App.tsx                   # Головний компонент
-├── main.tsx                  # Точка входу з Redux Provider
-└── ...
+│   ├── ControlledForm.tsx      # Керована форма з Redux
+│   ├── UncontrolledForm.tsx    # Некерована форма з useRef
+│   └── UsestateFetch.tsx       # Компонент з асинхронним завантаженням
+├── redux/
+│   ├── slices/
+│   │   ├── formSlice.ts        # Слайс для управління формами
+│   │   ├── usersSlice.ts       # Слайс для користувачів з API
+│   │   └── visibilitySlice.ts  # Слайс для керування видимістю
+│   ├── hooks.ts                # Типізовані Redux хуки
+│   └── store.ts                # Конфігурація Redux store
+├── App.tsx                     # Головний компонент
+└── main.tsx                    # Точка входу
 ```
 
-## Установка
+## Основні функції
 
-1. Клонуйте репозиторій:
-```bash
-git clone <repository-url>
-cd my-redux-app
+### 1. Керована форма (Controlled Form)
+- Використовує Redux для управління станом
+- Dropdown для вибору статусу
+- Відображення поточного стану
+
+### 2. Некерована форма (Uncontrolled Form)
+- Використовує `useRef` для отримання даних
+- Валідація полів
+- Очищення форми після відправки
+
+### 3. Асинхронне завантаження даних
+- Завантаження користувачів з JSONPlaceholder API
+- Відображення станів: loading, error, success
+- Можливість показати/приховати список користувачів
+
+## Технології
+
+- **React 18** - основний фреймворк
+- **Redux Toolkit** - управління станом
+- **TypeScript** - типізація
+- **Tailwind CSS** - стилізація
+- **Vite** - збірник проекту
+
+## Асинхронні операції
+
+Додаток використовує `createAsyncThunk` для обробки асинхронних операцій:
+
+```typescript
+export const fetchUsers = createAsyncThunk(
+  'users/fetchUsers',
+  async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users')
+    return response.json()
+  }
+)
 ```
 
-2. Встановіть залежності:
+Обробляються всі стани асинхронних операцій:
+- `pending` - завантаження
+- `fulfilled` - успішне завантаження
+- `rejected` - помилка
+
+## Redux Slices
+
+### formSlice
+- Управління станом форм
+- Збереження статусу та даних неконтрольованої форми
+
+### usersSlice
+- Асинхронне завантаження користувачів
+- Управління станами loading/error
+- Очищення даних
+
+### visibilitySlice
+- Керування видимістю компонентів
+- Toggle функції для показу/приховування елементів
+
+## Запуск проекту
+
+1. Встановіть залежності:
 ```bash
 npm install
 ```
 
-3. Встановіть Redux залежності:
-```bash
-npm install @reduxjs/toolkit react-redux
-npm install --save-dev @types/react-redux
-```
-
-## Запуск
-
+2. Запустіть проект:
 ```bash
 npm run dev
 ```
 
-Додаток буде доступний за адресою `http://localhost:5173`
+3. Відкрийте браузер за адресою `http://localhost:5173`
 
-## Redux Slices
+## Навчальні цілі
 
-### 1. Visibility Slice
-Управляє видимістю різних компонентів:
-- `isControlledFormVisible` - показ/приховування контрольованої форми
-- `isUsersVisible` - показ/приховування списку користувачів
-
-**Дії:**
-- `toggleControlledForm()` - перемикає видимість форми
-- `toggleUsersVisibility()` - перемикає видимість користувачів
-- `setControlledFormVisible(boolean)` - встановлює видимість форми
-- `setUsersVisible(boolean)` - встановлює видимість користувачів
-
-### 2. Users Slice
-Управляє даними користувачів та їх завантаженням:
-- `data` - масив користувачів
-- `loading` - статус завантаження
-- `error` - повідомлення про помилку
-
-**Дії:**
-- `fetchUsers()` - асинхронне завантаження користувачів
-- `clearUsers()` - очищення списку користувачів
-- `clearError()` - очищення помилки
-
-### 3. Form Slice
-Управляє станом форм:
-- `status` - поточний статус (idle, submitting, success, error)
-- `uncontrolledForm` - дані неконтрольованої форми
-
-**Дії:**
-- `setStatus(string)` - встановлення статусу
-- `setUncontrolledFormData(object)` - оновлення даних форми
-- `resetUncontrolledForm()` - скидання форми
-- `resetStatus()` - скидання статусу
-
-## Компоненти
-
-### ControlledForm
-Контрольована форма, що використовує Redux для управління станом:
-- Підключена до `form.status` через useAppSelector
-- Використовує `setStatus` action для оновлення стану
-
-### UncontrolledForm
-Традиційна неконтрольована форма з useRef:
-- Використовує локальні refs для доступу до значень
-- Валідація та відправка через обробник onSubmit
-
-### UsestateFetch
-Компонент для демонстрації асинхронних операцій:
-- Завантажує користувачів з JSONPlaceholder API
-- Управляє станом завантаження через Redux
-- Відображає loading, error та success стани
-
-## Типізація
-
-Проект повністю типізований з TypeScript:
-- `RootState` - тип для корневого стану Redux
-- `AppDispatch` - тип для dispatch функції
-- Типізовані хуки `useAppSelector` та `useAppDispatch`
-- Інтерфейси для всіх слайсів та їх станів
+Цей проект допомагає освоїти:
+- Основи Redux Toolkit
+- Створення та використання слайсів
+- Робота з `createAsyncThunk`
+- Типізація в TypeScript з Redux
+- Різниця між controlled та uncontrolled компонентами
+- Обробка асинхронних операцій в React/Redux
 
 ## API
 
-Додаток використовує [JSONPlaceholder](https://jsonplaceholder.typicode.com/) для демонстрації асинхронних операцій:
-- `GET /users` - отримання списку користувачів
+Використовується безкоштовне API JSONPlaceholder:
+- `https://jsonplaceholder.typicode.com/users` - список користувачів
 
-## Розробка
+## Структура стану Redux
 
-Для додавання нових слайсів:
-
-1. Створіть новий слайс у `src/redux/slices/`
-2. Додайте reducer до store у `src/redux/store.ts`
-3. Використовуйте типізовані хуки у компонентах
-
-Приклад нового слайса:
 ```typescript
-import { createSlice } from '@reduxjs/toolkit'
-
-interface NewSliceState {
-  value: string
-}
-
-const initialState: NewSliceState = {
-  value: ''
-}
-
-const newSlice = createSlice({
-  name: 'newSlice',
-  initialState,
-  reducers: {
-    setValue: (state, action) => {
-      state.value = action.payload
+{
+  form: {
+    status: string,
+    uncontrolledForm: {
+      name: string,
+      email: string,
+      message: string
     }
+  },
+  users: {
+    data: User[],
+    loading: boolean,
+    error: string | null
+  },
+  visibility: {
+    isControlledFormVisible: boolean,
+    isUsersVisible: boolean
   }
-})
-
-export const { setValue } = newSlice.actions
-export default newSlice.reducer
+}
 ```
-
-## Корисні команди
-
-- `npm run dev` - запуск в режимі розробки
-- `npm run build` - збірка для продакшну
-- `npm run preview` - перегляд production збірки
-- `npm run lint` - перевірка коду
-
-## Додаткові ресурси
-
-- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)
-- [React Redux Documentation](https://react-redux.js.org/)
-- [Vite Documentation](https://vitejs.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/)

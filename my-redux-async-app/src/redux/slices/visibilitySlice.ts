@@ -1,4 +1,3 @@
-// src/redux/slices/visibilitySlice.ts
 import { createSlice } from '@reduxjs/toolkit'
 
 interface VisibilityState {

@@ -1,4 +1,3 @@
-// src/redux/slices/usersSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 interface User {

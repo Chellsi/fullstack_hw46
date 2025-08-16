@@ -1,4 +1,3 @@
-// src/redux/slices/formSlice.ts
 import { createSlice } from '@reduxjs/toolkit'
 
 interface FormState {
